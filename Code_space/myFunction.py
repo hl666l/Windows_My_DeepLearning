@@ -266,15 +266,15 @@ def Train_Tets_Function(Epoch, model, Train_Data, lossFunction, optimizer, model
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            # with torch.no_grad():
-            #     if step % 10 == 9:
-            #         # 每100个batch记录一个batch的损失
-            #         Y_axis.append(loss.cpu().tolist())  # 将loss拿到cpu中（cpu无法直接访问GPU内的数据），转换成list。将list追加到Y轴数组中
-            #         X_axis.append(X_axis[len(X_axis) - 1] + 1)  # 计算X坐标，将其追加到X数组中
-            #
-            #     if step % 20 == 19:  # step 每500个batch 画一次图
-            #         title = ('epoch=%d step=%d loss=%.4f ' % (epoch, step, loss.cpu()))
-            #         View_loss(X_axis, Y_axis, X_label, Y_label, title)
+            with torch.no_grad():
+                if step % 10 == 9:
+                    # 每100个batch记录一个batch的损失
+                    Y_axis.append(loss.cpu().tolist())  # 将loss拿到cpu中（cpu无法直接访问GPU内的数据），转换成list。将list追加到Y轴数组中
+                    X_axis.append(X_axis[len(X_axis) - 1] + 1)  # 计算X坐标，将其追加到X数组中
+
+                if step % 30 == 29:  # step 每500个batch 画一次图
+                    title = ('epoch=%d step=%d loss=%.4f ' % (epoch, step, loss.cpu()))
+                    View_loss(X_axis, Y_axis, X_label, Y_label, title)
         test_accuracy(epoch, Test_data, number_test_data, model, lossFunction)
         # Out_Put_loss(epoch, step, Step_number, loss)
     torch.save(model.state_dict(), model_path + '/' + model_save_name)

@@ -21,7 +21,7 @@ BATCH_SIZE：每个batch的大小
 """
 species_path = '/home/helei/PycharmProjects/My_DeepLearning/Data_space/CelebDataProcessed/*'
 scale = 0.8
-epoch = 50
+epoch = 100
 step_number = 200
 model_path = '/home/helei/PycharmProjects/My_DeepLearning/Model_space'
 model_name = 'modelface.pk'
