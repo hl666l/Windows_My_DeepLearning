@@ -62,7 +62,7 @@ test_labels = all_labels[s:]
 
 train_ds = Mydatasetpro(train_imgs, train_labels, transform)
 test_ds = Mydatasetpro(test_imgs, test_labels, transform)
-train_dl = data.DataLoader(train_ds, batch_sizturne=BATCH_SIZE, shuffle=True)
+train_dl = data.DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True)
 test_dl = data.DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=True)
 
 test_data = iter(test_dl)

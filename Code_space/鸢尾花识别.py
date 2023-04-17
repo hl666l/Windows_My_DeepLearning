@@ -19,10 +19,10 @@ class MyNet(nn.Module):
     def get_data(self):
         inputs = []
         labels = []
-        with open('flower.csv') as file:
+        with open('/home/helei/PycharmProjects/My_DeepLearning/Data_space/iris.csv') as file:
             df = pd.read_csv(file, header=None)
-            x = df.iloc[:, 0:4].values
-            y = df.iloc[:, 4].values
+            x = df.iloc[1:, 0:4].values
+            y = df.iloc[1:, 4].values
             for i in range(len(x)):
                 inputs.append(x[i])
             for j in range(len(y)):
