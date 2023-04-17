@@ -25,7 +25,7 @@ model_path = '/home/helei/PycharmProjects/My_DeepLearning/Model_space'
 model_name = 'modelface.pk'
 img_size = 208
 img_path = '/home/helei/PycharmProjects/My_DeepLearning/Data_space/CelebDataProcessed/*/*.jpg'
-BATCH_SIZE = 20
+BATCH_SIZE = 10
 # 使用glob方法来获取数据图片的所有路径
 all_imgs_path = glob.glob(img_path)
 
@@ -41,7 +41,7 @@ train_imgs, train_labels, test_imgs, test_labels, s = myFunction.Partition_Datas
 train_ds = MC(train_imgs, train_labels, transform)
 test_ds = MC(test_imgs, test_labels, transform)
 
-train_dl = data.DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True)
+train_dl = data.DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, num_workers=6, pin_memory=True)
 test_dl = data.DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=True)
 
 # test_data = iter(test_dl)
