@@ -20,10 +20,10 @@ BATCH_SIZE：每个batch的大小
 scale = 0.9
 epoch = 50
 step_number = 200
-mode_path = '/home/helei/My_DeepLearning/Model_space'
+mode_path = '/home/helei/PycharmProjects/My_DeepLearning/Model_space'
 model_name = 'model.pk'
 img_size = 208
-img_path = '/home/helei/My_DeepLearning/Data_space/AugmentedAlzheimerDataset/*/*.jpg'
+img_path = '/home/helei/PycharmProjects/My_DeepLearning/Data_space/AugmentedAlzheimerDataset/*/*.jpg'
 BATCH_SIZE = 20
 # 使用glob方法来获取数据图片的所有路径
 all_imgs_path = glob.glob(img_path)

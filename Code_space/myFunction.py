@@ -164,7 +164,7 @@ def View_loss(X_axis, Y_axis, X_label, Y_label, title):
     plt.xlabel(X_label)
     plt.ylabel(Y_label)
     plt.title(title)
-    plt.savefig('/home/helei/My_DeepLearning/Image/' + title + '.png')
+    plt.savefig('/home/helei/PycharmProjects/My_DeepLearning/Image/' + title + '.png')
     plt.pause(0.2)
 
 
