@@ -27,7 +27,7 @@ model_path = '/home/helei/PycharmProjects/My_DeepLearning/Model_space'
 model_name = 'modelface.pk'
 img_size = 224
 img_path = '/home/helei/PycharmProjects/My_DeepLearning/Data_space/CelebDataProcessed/*/*.jpg'
-BATCH_SIZE = 50
+BATCH_SIZE = 100
 # 使用glob方法来获取数据图片的所有路径
 all_imgs_path = glob.glob(img_path)
 
