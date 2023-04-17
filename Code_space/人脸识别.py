@@ -1,9 +1,11 @@
 import glob
 import torch
+import torch.nn as nn
 from torch.utils import data
 import myFunction
 from myFunction import myDataset_class as MC
 from Model import Model2 as MD
+import torchvision
 
 """
 
@@ -23,9 +25,9 @@ epoch = 50
 step_number = 200
 model_path = '/home/helei/PycharmProjects/My_DeepLearning/Model_space'
 model_name = 'modelface.pk'
-img_size = 208
+img_size = 224
 img_path = '/home/helei/PycharmProjects/My_DeepLearning/Data_space/CelebDataProcessed/*/*.jpg'
-BATCH_SIZE = 10
+BATCH_SIZE = 50
 # 使用glob方法来获取数据图片的所有路径
 all_imgs_path = glob.glob(img_path)
 
@@ -48,7 +50,11 @@ test_dl = data.DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=True)
 # (test_inputs, test_labels) = next(test_data)
 # test_labels = test_labels.type(torch.LongTensor)
 
-model = myFunction.Model_To_Cuda(MD)
+# model = myFunction.Model_To_Cuda(MD)
+model = torchvision.models.resnet18(weights=True)  # ****
+num_ftrs = model.fc.in_features
+model.fc = nn.Linear(num_ftrs, 150)
+model = model.cuda()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 loss = torch.nn.CrossEntropyLoss()
 if torch.cuda.is_available():

@@ -107,13 +107,13 @@ class myDataset_class(data.Dataset):
         return len(self.data)
 
 
-def Model_To_Cuda(Model):
+def Model_To_Cuda(mo):
     """
 
     :param Model: 模型
     :return:
     """
-    model = Model()
+    model = mo()
     if torch.cuda.is_available():
         model = model.cuda()
     else:
