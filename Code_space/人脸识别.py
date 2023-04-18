@@ -4,7 +4,6 @@ import torch.nn as nn
 from torch.utils import data
 import myFunction
 from myFunction import myDataset_class as MC
-from Model import Model2 as MD
 import torchvision
 
 """
@@ -21,13 +20,15 @@ BATCH_SIZE：每个batch的大小
 """
 species_path = '/home/helei/PycharmProjects/My_DeepLearning/Data_space/CelebDataProcessed/*'
 scale = 0.8
-epoch = 100
+epoch = 60
 step_number = 200
 model_path = '/home/helei/PycharmProjects/My_DeepLearning/Model_space'
 model_name = 'modelface.pk'
 img_size = 224
 img_path = '/home/helei/PycharmProjects/My_DeepLearning/Data_space/CelebDataProcessed/*/*.jpg'
 BATCH_SIZE = 100
+save_path = '/home/helei/PycharmProjects/My_DeepLearning/Image/'
+correct_path = '/home/helei/PycharmProjects/My_DeepLearning/correct_img/'
 # 使用glob方法来获取数据图片的所有路径
 all_imgs_path = glob.glob(img_path)
 
@@ -45,13 +46,7 @@ test_ds = MC(test_imgs, test_labels, transform)
 
 train_dl = data.DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, num_workers=6, pin_memory=True)
 test_dl = data.DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=True)
-
-# test_data = iter(test_dl)
-# (test_inputs, test_labels) = next(test_data)
-# test_labels = test_labels.type(torch.LongTensor)
-
-# model = myFunction.Model_To_Cuda(MD)
-model = torchvision.models.resnet18(weights=True)  # ****
+model = torchvision.models.resnet18(weights=True)
 num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, 150)
 model = model.cuda()
@@ -62,4 +57,4 @@ if torch.cuda.is_available():
 
 if __name__ == '__main__':
     myFunction.Train_Tets_Function(epoch, model, train_dl, loss, optimizer, model_path,
-                                   model_name, test_dl, s)
+                                   model_name, test_dl, s, save_path, correct_path)

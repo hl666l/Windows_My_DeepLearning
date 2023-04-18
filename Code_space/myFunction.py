@@ -149,7 +149,7 @@ def Data_To_Cuda(data):
     return my_data
 
 
-def View_loss(X_axis, Y_axis, X_label, Y_label, title):
+def View_loss(X_axis, Y_axis, X_label, Y_label, title, save_path):
     """
 
     :param X_axis: x轴
@@ -174,11 +174,21 @@ def View_loss(X_axis, Y_axis, X_label, Y_label, title):
     plt.xlabel(X_label)
     plt.ylabel(Y_label)
     plt.title(title)
-    plt.savefig('/home/helei/PycharmProjects/My_DeepLearning/Image/' + title + '.png')
+    plt.savefig(save_path + title + '.png')
     plt.pause(0.2)
 
 
-def Train_Function(Epoch, model, Train_Data, lossFunction, optimizer, Step_number, model_path, model_save_name):
+def View_correct(X_axis, Y_axis, correct_save_path, X_label='Epoch', Y_label='Accuracy'):
+    plt.cla()
+    plt.plot(X_axis, Y_axis, 'r-', lw=1)
+    plt.xlabel(X_label)
+    plt.ylabel(Y_label)
+    plt.savefig(correct_save_path + str(X_axis[-1])+'正确率' + '.png')
+    plt.pause(0.2)
+
+
+def Train_Function(Epoch, model, Train_Data, lossFunction, optimizer, Step_number, model_path, model_save_name,
+                   save_path):
     """
     训练函数
     :param model_path: 模型保存地址
@@ -214,7 +224,7 @@ def Train_Function(Epoch, model, Train_Data, lossFunction, optimizer, Step_numbe
 
                 if step % 70 == 69:  # step 每500个batch 画一次图
                     title = ('epoch=%d step=%d loss=%.4f ' % (epoch, step, loss.cpu()))
-                    View_loss(X_axis, Y_axis, X_label, Y_label, title)
+                    View_loss(X_axis, Y_axis, X_label, Y_label, title, save_path)
             # Out_Put_loss(epoch, step, Step_number, loss)
     torch.save(model.state_dict(), model_path + '/' + model_save_name)
 
@@ -237,8 +247,27 @@ def test_accuracy(epoch, test_data, number_data, model, lossFunction):
     print("epoch is:", epoch, "loss is:%.4f" % test_loss, "correct is:%.2f" % test_correct)
 
 
+def test_accuracy_img(epoch_list, test_data, number_data, model, lossFunction, correct_axis, save_path):
+    model = model
+    sum_loss = 0.0
+    sum_correct = 0.0
+    for step, (data, label) in enumerate(test_data):
+        data = Data_To_Cuda(data)
+        label = Data_To_Cuda(label)
+        y = model(data)
+        loss = lossFunction(y, label)
+        _, pred = torch.max(y.data, dim=1)
+        correct = pred.eq(label.data).sum()
+        sum_loss += loss.item()
+        sum_correct += correct.item()
+    test_correct = sum_correct * 1.0 / number_data
+    correct_axis.append(test_correct)
+    print('epoch:', epoch_list[-1], 'Accuracy:%.2f' % test_correct)
+    View_correct(epoch_list, correct_axis, save_path)
+
+
 def Train_Tets_Function(Epoch, model, Train_Data, lossFunction, optimizer, model_path, model_save_name, Test_data,
-                        number_test_data):
+                        number_test_data, save_path, correct_save_path):
     """
     训练函数
     :param model_path: 模型保存地址
@@ -255,7 +284,10 @@ def Train_Tets_Function(Epoch, model, Train_Data, lossFunction, optimizer, model
     Y_axis = [0]
     X_label = 'rate of progress'
     Y_label = 'loss'
+    epoch_list = []
+    correct_list = []
     for epoch in range(Epoch):
+        epoch_list.append(epoch)
         for step, (train_data, train_labels) in enumerate(Train_Data):
             # 数据扔到cuda中
             train_data = Data_To_Cuda(train_data)
@@ -266,15 +298,9 @@ def Train_Tets_Function(Epoch, model, Train_Data, lossFunction, optimizer, model
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            with torch.no_grad():
-                if step % 10 == 9:
-                    # 每100个batch记录一个batch的损失
-                    Y_axis.append(loss.cpu().tolist())  # 将loss拿到cpu中（cpu无法直接访问GPU内的数据），转换成list。将list追加到Y轴数组中
-                    X_axis.append(X_axis[len(X_axis) - 1] + 1)  # 计算X坐标，将其追加到X数组中
-
-                if step % 30 == 29:
-                    title = ('epoch=%d step=%d loss=%.4f ' % (epoch, step, loss.cpu()))
-                    View_loss(X_axis, Y_axis, X_label, Y_label, title)
-        test_accuracy(epoch, Test_data, number_test_data, model, lossFunction)
-        # Out_Put_loss(epoch, step, Step_number, loss)
+        Y_axis.append(loss.cpu().tolist())
+        X_axis.append(X_axis[len(X_axis) - 1] + 1)
+        title = ('epoch=%d  loss=%.4f ' % (epoch, loss.cpu()))
+        View_loss(X_axis, Y_axis, X_label, Y_label, title, save_path)
+        test_accuracy_img(epoch_list, Test_data, number_test_data, model, lossFunction, correct_list, correct_save_path)
     torch.save(model.state_dict(), model_path + '/' + model_save_name)
