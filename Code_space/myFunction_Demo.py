@@ -40,7 +40,7 @@ train_ds = MC(train_imgs, train_labels, transform)
 test_ds = MC(test_imgs, test_labels, transform)
 
 train_dl = data.DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, num_workers=6, pin_memory=True)
-test_dl = data.DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=True)
+test_dl = data.DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=True, num_workers=6, pin_memory=True)
 
 test_data = iter(test_dl)
 (test_inputs, test_labels) = next(test_data)
