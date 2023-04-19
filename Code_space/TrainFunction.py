@@ -43,8 +43,12 @@ def Train_Function(Epoch, model, Train_Data, lossFunction, optimizer, step_numbe
     torch.save(model.state_dict(), model_save_path + '/' + model_save_name)
 
 
-def Train_Tets_Function(Epoch, model, Train_Data, lossFunction, optimizer, model_save_path, model_save_name, Test_data,
-                        number_test_data, loss_image_save_path, correct_save_path):
+def Train_Tets_Function(
+        Epoch, model, Train_Data,
+        lossFunction, optimizer, model_save_path,
+        model_save_name, Test_data, number_test_data,
+        loss_image_save_path, correct_save_path
+):
     """
     :param Epoch: 训练轮次
     :param model: 训练模型
