@@ -7,7 +7,6 @@ from myFunction import myDataset_class as MC
 import torchvision
 
 """
-
 scale: 训练集和测试集比例
 epoch： 训练多少轮
 step_number： 训练步数
@@ -16,7 +15,6 @@ model_name: 模型保存时的名称
 img_size: 训练时需要的图片尺寸
 img_path:匹配路径
 BATCH_SIZE：每个batch的大小
-
 """
 species_path = '/home/helei/PycharmProjects/My_DeepLearning/Data_space/CelebDataProcessed/*'
 scale = 0.8
@@ -46,12 +44,15 @@ test_ds = MC(test_imgs, test_labels, transform)
 
 train_dl = data.DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, num_workers=6, pin_memory=True)
 test_dl = data.DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=True)
+
 model = torchvision.models.resnet18(weights=True)
 num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, 150)
 model = model.cuda()
+
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 loss = torch.nn.CrossEntropyLoss()
+
 if torch.cuda.is_available():
     loss = loss.cuda()
 
